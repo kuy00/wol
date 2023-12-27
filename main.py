@@ -21,9 +21,9 @@ def get_mac_by_ip(ip: str):
 
 
 @app.get('/send')
-def send_magic_packet(ip: str, mac: str):
+def send_magic_packet(broadcast: str, mac: str):
     try:
-        Packet.send(ip, mac)
+        Packet.send(broadcast, mac)
         return 'success'
     except Exception:
         return 'error'

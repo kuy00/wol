@@ -9,3 +9,4 @@ services:
             dockerfile: DockerFile
             target: app
         working_dir: /var/www
+        restart: always

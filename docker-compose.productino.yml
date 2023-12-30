@@ -1,7 +1,11 @@
 version: "3.7"
 
 services:
-    backend:
-        container_name: backend
+    wol:
+        container_name: wol
+        network_mode: host
         build:
-            target: production-stage
+            context: ./
+            dockerfile: DockerFile
+            target: app
+        working_dir: /var/www

@@ -6,7 +6,7 @@ services:
         network_mode: host
         build:
             context: ./
-            dockerfile: DockerFile
+            dockerfile: Dockerfile
             target: app
         working_dir: /var/www
         restart: always

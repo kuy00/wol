@@ -1,8 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import PlainTextResponse
 from arp import Arp
 from packet import Packet
 
 app = FastAPI()
+
+
+@app.middleware('http')
+async def check_private_ip(request: Request, call_next):
+    client_host = request.client.host
+
+    if not client_host.startswith('172') and not client_host.startswith('10')\
+            and not client_host.startswith('192') and not client_host.startswith('127'):
+        return PlainTextResponse("Unauthenticated")
+
+    response = await call_next(request)
+    return response
 
 
 @app.get('/mac')

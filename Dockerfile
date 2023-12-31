@@ -6,8 +6,8 @@ RUN apt-get update \
 COPY requirements.txt requirements.txt
 
 # python package install
-RUN pip install --upgrade pip \
-    && pip install -r requirements.txt
+RUN pip install --upgrade pip --root-user-action=ignore \
+    && pip install -r requirements.txt --root-user-action=ignore
 
 WORKDIR /var/www
 

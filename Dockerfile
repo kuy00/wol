@@ -1,7 +1,7 @@
 # install python
 FROM python:3.9 as base
 RUN apt-get update \
-    && apt-get install -y -qq python3-pip netcat-openbsd
+    && apt-get install -y -qq python3-pip netcat-openbsd libpcap0.8
 
 COPY requirements.txt requirements.txt
 
@@ -11,7 +11,6 @@ RUN pip install --upgrade pip \
 
 WORKDIR /var/www
 
-# app
 FROM base as app
 COPY . .
 EXPOSE 8000

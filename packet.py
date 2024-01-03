@@ -5,21 +5,20 @@ import struct
 class Packet:
     @staticmethod
     def send(broadcast, mac):
-        mac = mac.split(':')
-        address = struct.pack(
-            'BBBBBB',
-            int(mac[0], 16),
-            int(mac[1], 16),
-            int(mac[2], 16),
-            int(mac[3], 16),
-            int(mac[4], 16),
-            int(mac[5], 16),
-        )
+        if len(mac) == 17:
+            sep = mac[2]
+            mac = mac.replace(sep, "")
+        elif len(mac) == 14:
+            sep = mac[4]
+            mac = mac.replace(sep, "")
 
-        magic = b"\xFF" * 6 + address * 16
+        if len(mac) != 12:
+            raise ValueError("Incorrect MAC address format")
+        packet = bytes.fromhex("F" * 12 + mac * 16)
 
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        sock.sendto(magic, (broadcast, 9))
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+            sock.connect((broadcast, 9))
+            sock.send(packet)
 
-        sock.close()
+            sock.close()

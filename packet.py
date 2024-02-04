@@ -1,5 +1,4 @@
 import socket
-import struct
 
 
 class Packet:
@@ -16,9 +15,9 @@ class Packet:
             raise ValueError("Incorrect MAC address format")
         packet = bytes.fromhex("F" * 12 + mac * 16)
 
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0) as sock:
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-            sock.connect((broadcast, 9))
+            sock.connect((broadcast, 0))
             sock.send(packet)
 
             sock.close()
